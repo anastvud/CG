@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>3D Car with Circles</title>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+    <style type="text/css">
+        body {
+            background-color: #000000;
+            overflow: hidden;
+            margin: 0;
+        }
+    </style>
+    <script src="three.js"></script>
+</head>
+<body>
+    <div id="WebGLCanvas"></div>
+    <script>
+        let scene;
+        let camera;
+        let renderer;
+
+        initializeScene();
+        renderScene();
+
+        function initializeScene() {
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setClearColor(0x000000, 1);
+            canvasWidth = window.innerWidth;
+            canvasHeight = window.innerHeight;
+            renderer.setSize(canvasWidth, canvasHeight);
+            document.getElementById("WebGLCanvas").appendChild(renderer.domElement);
+
+            scene = new THREE.Scene();
+
+            camera = new THREE.PerspectiveCamera(45, canvasWidth / canvasHeight, 1, 100);
+            camera.position.set(0, 0, 5);
+            camera.lookAt(scene.position);
+            scene.add(camera);
+
+            // Create car body (rectangle)
+            let carBodyGeometry = new THREE.BoxGeometry(2, 0.5, 0.5);
+            let carBodyMaterial = new THREE.MeshBasicMaterial({ color: 0x007FB9 });
+            let carBody = new THREE.Mesh(carBodyGeometry, carBodyMaterial);
+            scene.add(carBody);
+
+
+            const triangleVertices = [
+                new THREE.Vector3(0, 1, 0),
+                new THREE.Vector3(-1, -1, 0),
+                new THREE.Vector3(1, -1, 0)
+            ];
+
+            const geometry = new THREE.BufferGeometry().setFromPoints(triangleVertices);
+            const material = new THREE.MeshBasicMaterial({ color: 0x710650 });
+            const triangleMesh = new THREE.Mesh(geometry, material);
+            scene.add(triangleMesh);
+
+            // Create car roof (triangle)
+            let carRoofGeometry = new THREE.Geometry();
+            carRoofGeometry.vertices.push(new THREE.Vector3(0.0, 1.0, 0.0));
+            carRoofGeometry.vertices.push(new THREE.Vector3(-1.0, -1.0, 0.0));
+            carRoofGeometry.vertices.push(new THREE.Vector3(1.0, -1.0, 0.0));
+            carRoofGeometry.faces.push(new THREE.Face3(0, 1, 2));
+
+            let carRoofMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, side: THREE.DoubleSide });
+            let carRoof = new THREE.Mesh(carRoofGeometry, carRoofMaterial);
+            carRoof.position.set(0, 0.5, 0);
+            scene.add(carRoof);
+
+            // Create wheels (circles)
+            let wheelGeometry = new THREE.CircleGeometry(0.2, 32);
+            let wheelMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
+            let frontWheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
+            let rearWheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
+            frontWheel.position.set(-0.8, -0.5, -0.25);
+            rearWheel.position.set(0.8, -0.5, -0.25);
+            scene.add(frontWheel);
+            scene.add(rearWheel);
+
+            // Add circles (e.g., headlights)
+            // let headlightGeometry = new THREE.CircleGeometry(0.05, 32);
+            // let headlightMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+            // let leftHeadlight = new THREE.Mesh(headlightGeometry, headlightMaterial);
+            // let rightHeadlight = new THREE.Mesh(headlightGeometry, headlightMaterial);
+            // leftHeadlight.position.set(-0.7, 0.2, 0.26);
+            // rightHeadlight.position.set(0.7, 0.2, 0.26);
+            // scene.add(leftHeadlight);
+            // scene.add(rightHeadlight);
+        }
+
+        function renderScene() {
+            renderer.render(scene, camera);
+        }
+    </script>
+</body>
+</html>
