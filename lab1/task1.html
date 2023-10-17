@@ -92,16 +92,12 @@
             scene.add(camera);
 
             createCar();
-
         }
 
-
         function animateScene() { 
-            //    wrapper.rotation.y += 0.005; 
- 
-            requestAnimationFrame(animateScene); 
-
-            renderScene(); 
+            wrapper.position.x += 0.01;
+            requestAnimationFrame(animateScene);
+            renderScene();
 
         } 
 
