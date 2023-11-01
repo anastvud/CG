@@ -109,14 +109,12 @@
                  scene.add(sphere);
 				 
 
-				 torusGeometry = new THREE.TorusGeometry(2.5, 1, 0.5, 40);
+				 torusGeometry = new THREE.TorusGeometry(2.0, 1, 0.5, 40);
                  torusMaterial = new THREE.MeshPhongMaterial({color: 0xff77ff, specular: 0xffffff, 
 				 shininess: 30});
                  torus = new THREE.Mesh(torusGeometry, torusMaterial);
                  // position the torus
-                 torus.position.x = 20;
-                 torus.position.y = 10;
-                 torus.position.z = -10;
+                 torus.position.set(15,5,-10);
                  torus.castShadow = true;
                  // add the torus to the scene
                  scene.add(torus);
@@ -159,9 +157,9 @@
 		        //  spotLight.target = sphere;
 		         var helper = new THREE.CameraHelper( spotLight.shadow.camera );
                  scene.add( helper );
-		        //  spotLight.shadow.camera.near = 0.1;
-		        //  spotLight.shadow.camera.far = 100;
-		        //  spotLight.shadow.camera.fov = 60;
+		         spotLight.shadow.camera.near = 0.1;
+		         spotLight.shadow.camera.far = 100;
+		         spotLight.shadow.camera.fov = 60;
 		        //  spotLight.shadow.mapSize.width = 64;
 		        //  spotLight.shadow.mapSize.height = 64;
 		
@@ -184,7 +182,8 @@
 				                             
         }
 
-     
+
+        // Function to gradually scale the torus
 
         function renderScene() {
 		    stats.update();
@@ -197,6 +196,30 @@
                step += controls.bouncingSpeed;      //step += 0.04;
                sphere.position.x = 20 +( 10 * (Math.cos(step)));
                sphere.position.y = 2 + ( 10 * Math.abs(Math.sin(step)));
+
+            // do something with torus
+            // Function to gradually scale the torus
+
+
+                torus.scale.x = 0.5 +(Math.abs(Math.sin(step)));
+                torus.scale.y = 0.5 + (Math.abs(Math.sin(step)));
+                torus.scale.z = 0.5 +(Math.abs(Math.sin(step)));
+                torus.rotation.y += controls.rotationSpeed;
+
+
+            // let scale = 1;
+            // if (scale < 2) {
+            //     scale += 0.1;
+            //     torus.scale.x += 0.01;
+            //     torus.scale.y += 0.01;
+            //     torus.scale.z += 0.01;
+            // }
+            // if (torus.scale.x === 2) {
+            //     torus.scale.x -= 0.01;
+            //     torus.scale.y -= 0.01;
+            //     torus.scale.z -= 0.01;
+            // }
+                
 
             // render using requestAnimationFrame
             requestAnimationFrame(renderScene);
