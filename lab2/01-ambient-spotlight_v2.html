@@ -27,6 +27,7 @@
 			 var controls;
 			 var renderer;
 			 var step = 0.0;
+             var stepScale = 0.0;
 			 
 		
 		     // Initialize the scene
@@ -109,15 +110,30 @@
                  scene.add(sphere);
 				 
 
+                 // create torus
 				 torusGeometry = new THREE.TorusGeometry(2.0, 1, 0.5, 40);
-                 torusMaterial = new THREE.MeshPhongMaterial({color: 0xff77ff, specular: 0xffffff, 
+                 torusMaterial = new THREE.MeshPhongMaterial({color: 0x802392, specular: 0xffffff, 
 				 shininess: 30});
                  torus = new THREE.Mesh(torusGeometry, torusMaterial);
                  // position the torus
-                 torus.position.set(15,5,-10);
+                 torus.position.set(10,5,-15);
                  torus.castShadow = true;
                  // add the torus to the scene
                  scene.add(torus);
+
+
+                // create 
+                 icosahedronGeometry = new THREE.IcosahedronGeometry(3, 0);
+                 icosahedronMaterial = new THREE.MeshPhongMaterial({color: 0x4CC9F0, specular: 0xffffff, 
+				 shininess: 30});
+                 icosahedron = new THREE.Mesh(icosahedronGeometry, icosahedronMaterial);
+                 // position the icosahedron
+                 icosahedron.position.set(4,5,15);
+                 icosahedron.castShadow = true;
+                 // add the icosahedron to the scene
+                 scene.add(icosahedron);
+
+
 
 
 
@@ -142,8 +158,7 @@
                  scene.add( axesHelper );
 				 
 				 // add subtle ambient lighting
-                 ambiColor = "#0a0a0a";
-                 ambientLight = new THREE.AmbientLight(ambiColor);
+                 ambientLight = new THREE.AmbientLight("#0a0a0a");
                  scene.add(ambientLight);
 				 
 				 
@@ -153,13 +168,13 @@
                  spotLight.castShadow = true;
 		  
 		         spotLight.angle = 0.5;
-		         spotLight.penumbra = .7;
+		         spotLight.penumbra = 0.5;
 		        //  spotLight.target = sphere;
 		         var helper = new THREE.CameraHelper( spotLight.shadow.camera );
                  scene.add( helper );
-		         spotLight.shadow.camera.near = 0.1;
-		         spotLight.shadow.camera.far = 100;
-		         spotLight.shadow.camera.fov = 60;
+		        //  spotLight.shadow.camera.near = 0.1;
+		        //  spotLight.shadow.camera.far = 100;
+		        //  spotLight.shadow.camera.fov = 60;
 		        //  spotLight.shadow.mapSize.width = 64;
 		        //  spotLight.shadow.mapSize.height = 64;
 		
@@ -172,12 +187,14 @@
                      controls = new function () {
                      this.rotationSpeed = 0.02;
                      this.bouncingSpeed = 0.03;
+                     this.scalingSpeed = 0.02;
                  };
 				 
 				 
 				 var gui = new dat.GUI();
                  gui.add(controls, 'rotationSpeed', 0, 0.2);
                  gui.add(controls, 'bouncingSpeed', 0, 0.2);
+                 gui.add(controls, 'scalingSpeed', 0, 0.2);
         		
 				                             
         }
@@ -188,37 +205,25 @@
         function renderScene() {
 		    stats.update();
 		    // rotate the cube around its axes
-			   cube.rotation.x += controls.rotationSpeed;
-               cube.rotation.y += controls.rotationSpeed;
-               cube.rotation.z += controls.rotationSpeed;
+                cube.rotation.x += controls.rotationSpeed;
+                cube.rotation.y += controls.rotationSpeed;
+                cube.rotation.z += controls.rotationSpeed;
 
             // bounce the sphere up and down
-               step += controls.bouncingSpeed;      //step += 0.04;
-               sphere.position.x = 20 +( 10 * (Math.cos(step)));
-               sphere.position.y = 2 + ( 10 * Math.abs(Math.sin(step)));
+                step += controls.bouncingSpeed;      //step += 0.04;
+                sphere.position.x = 20 +( 10 * (Math.cos(step)));
+                sphere.position.y = 2 + ( 10 * Math.abs(Math.sin(step)));
 
             // do something with torus
-            // Function to gradually scale the torus
-
-
-                torus.scale.x = 0.5 +(Math.abs(Math.sin(step)));
-                torus.scale.y = 0.5 + (Math.abs(Math.sin(step)));
-                torus.scale.z = 0.5 +(Math.abs(Math.sin(step)));
+                stepScale += controls.scalingSpeed;
+                torus.scale.x = 0.5 +(Math.abs(Math.sin(stepScale)));
+                torus.scale.y = 0.5 + (Math.abs(Math.sin(stepScale)));
+                torus.scale.z = 0.5 +(Math.abs(Math.sin(stepScale)));
                 torus.rotation.y += controls.rotationSpeed;
 
 
-            // let scale = 1;
-            // if (scale < 2) {
-            //     scale += 0.1;
-            //     torus.scale.x += 0.01;
-            //     torus.scale.y += 0.01;
-            //     torus.scale.z += 0.01;
-            // }
-            // if (torus.scale.x === 2) {
-            //     torus.scale.x -= 0.01;
-            //     torus.scale.y -= 0.01;
-            //     torus.scale.z -= 0.01;
-            // }
+            // do something with icosahedron
+                icosahedron.rotation.y += controls.rotationSpeed;
                 
 
             // render using requestAnimationFrame
