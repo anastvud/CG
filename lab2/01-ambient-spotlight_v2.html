@@ -61,9 +61,6 @@
             //document.getElementById("WebGLCanvas").appendChild(renderer.domElement);
 
 
-
-
-
             // create the ground plane
             var planeGeometry = new THREE.PlaneGeometry(60, 60);
             var planeMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, side: THREE.DoubleSide });
@@ -76,9 +73,6 @@
             plane.position.z = 0
             // add the plane to the scene
             scene.add(plane);
-
-
-
 
 
             // create a cube
@@ -97,10 +91,7 @@
             scene.add(cube);
 
 
-
-
-
-            // add sphere
+            // create a sphere
             sphereGeometry = new THREE.SphereGeometry(4, 20, 20);
             sphereMaterial = new THREE.MeshPhongMaterial({
                 color: 0x7777ff, specular: 0xffffff,
@@ -130,7 +121,7 @@
             scene.add(torus);
 
 
-            // create 
+            // create icosahedron
             icosahedronGeometry = new THREE.IcosahedronGeometry(3, 0);
             icosahedronMaterial = new THREE.MeshPhongMaterial({
                 color: 0x4CC9F0, specular: 0xffffff,
@@ -142,14 +133,6 @@
             icosahedron.castShadow = true;
             // add the icosahedron to the scene
             scene.add(icosahedron);
-
-
-
-
-
-
-
-
 
 
 
@@ -179,72 +162,47 @@
 
             spotLight.angle = 0.5;
             spotLight.penumbra = 0.5;
-            //  spotLight.target = sphere;
-            var helper = new THREE.CameraHelper(spotLight.shadow.camera);
-            scene.add(helper);
-            //  spotLight.shadow.camera.near = 0.1;
-            //  spotLight.shadow.camera.far = 100;
-            //  spotLight.shadow.camera.fov = 60;
-            //  spotLight.shadow.mapSize.width = 64;
-            //  spotLight.shadow.mapSize.height = 64;
-
+            // var helper = new THREE.CameraHelper(spotLight.shadow.camera);
+            // scene.add(helper);
             scene.add(spotLight);
 
 
-
-            // add spotlight for the shadows
-            spotlightTorus = new THREE.SpotLight(0xE08DAC);
+            // add spotlight for the torus
+            spotlightTorus = new THREE.SpotLight(0x00A896);
             spotlightTorus.position.set(10, 30, -35);
             spotlightTorus.castShadow = true;
 
             spotlightTorus.angle = 0.2;
             spotlightTorus.penumbra = 0.4;
-            spotlightTorus.target = torus;
-            var helper = new THREE.CameraHelper(spotlightTorus.shadow.camera);
-            scene.add(helper);
+            spotlightTorus.target = icosahedron;
+            // var helper = new THREE.CameraHelper(spotlightTorus.shadow.camera);
+            // scene.add(helper);
             spotlightTorus.shadow.camera.near = 0.1;
             spotlightTorus.shadow.camera.far = 100;
             spotlightTorus.shadow.camera.fov = 60;
-            //  spotlightTorus.shadow.mapSize.width = 64;
-            //  spotlightTorus.shadow.mapSize.height = 64;
-
             scene.add(spotlightTorus);
 
 
 
+            // add spotlight for the icosahedron
+            spotlightIcosahedron = new THREE.SpotLight(0xE08DAC);
+            spotlightIcosahedron.position.set(10, 30, -35);
+            spotlightIcosahedron.castShadow = true;
 
-
-
-
-
-
-
-            // add spotlight for the shadows
-            spotlightTorus = new THREE.SpotLight(0xE08DAC);
-            spotlightTorus.position.set(10, 30, -35);
-            spotlightTorus.castShadow = true;
-
-            spotlightTorus.angle = 0.2;
-            spotlightTorus.penumbra = 0.4;
-            spotlightTorus.target = torus;
-            var helper = new THREE.CameraHelper(spotlightTorus.shadow.camera);
-            scene.add(helper);
-            spotlightTorus.shadow.camera.near = 0.1;
-            spotlightTorus.shadow.camera.far = 100;
-            spotlightTorus.shadow.camera.fov = 60;
-            //  spotlightTorus.shadow.mapSize.width = 64;
-            //  spotlightTorus.shadow.mapSize.height = 64;
-
-            scene.add(spotlightTorus);
-
-
-
-
+            spotlightIcosahedron.angle = 0.2;
+            spotlightIcosahedron.penumbra = 0.4;
+            spotlightIcosahedron.target = torus;
+            // var helper = new THREE.CameraHelper(spotlightIcosahedron.shadow.camera);
+            // scene.add(helper);
+            spotlightIcosahedron.shadow.camera.near = 0.1;
+            spotlightIcosahedron.shadow.camera.far = 100;
+            spotlightIcosahedron.shadow.camera.fov = 60;
+            spotlightIcosahedron.shadow.mapSize.width = 64;
+            spotlightIcosahedron.shadow.mapSize.height = 64;
+            scene.add(spotlightIcosahedron);
 
 
             document.getElementById("WebGLCanvas").appendChild(renderer.domElement);
-
-            /* var step = 0; */
 
             controls = new function () {
                 this.rotationSpeed = 0.02;
@@ -258,9 +216,7 @@
             gui.add(controls, 'bouncingSpeed', 0, 0.2);
             gui.add(controls, 'scalingSpeed', 0, 0.2);
 
-
         }
-
 
         // Function to gradually scale the torus
 
@@ -286,6 +242,7 @@
 
             // do something with icosahedron
             icosahedron.rotation.y += controls.rotationSpeed;
+            icosahedron.position.x = 5 + (10 * (Math.cos(step + 0.2)));
 
 
             // render using requestAnimationFrame
