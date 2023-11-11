@@ -99,19 +99,39 @@
             scene.add(floor);
 
             // TORUSKNOT
-            torusKnotGeometry = new THREE.TorusKnotGeometry(5.0, 0.8, 100, 10, 5, 8);
-            torusKnotMaterial = new THREE.MeshPhongMaterial({
-                color: 0xff0000, specular: 0xffffff,
-                shininess: 100
-            });
-            torusKnot = new THREE.Mesh(torusKnotGeometry, torusKnotMaterial);
-            // position the torusKnot
-            torusKnot.position.set(10, 5, -20);
-            torusKnot.castShadow = true;
-            // add the torusKnot to the scene
+            var torusKnot = createMesh(new THREE.TorusKnotGeometry(10, 2, 100, 10, 5, 8), "plaster-normal.jpg")
+            // torusKnotGeometry = new THREE.TorusKnotGeometry(10, 2, 100, 10, 5, 8);
+            // torusKnotMaterial = new THREE.MeshPhongMaterial({
+            //     color: 0xff0000, specular: 0xffffff,
+            //     shininess: 100
+            // });
+            // torusKnot = new THREE.Mesh(torusKnotGeometry, torusKnotMaterial);
+            // // position the torusKnot
+            torusKnot.position.set(10, 20, -20);
+            // torusKnot.castShadow = true;
+            // // add the torusKnot to the scene
             scene.add(torusKnot);
 
-            var cubeGeom = new THREE.CubeGeometry(200, 200, 30,1,1,1);
+
+
+            spotlightTorus = new THREE.SpotLight(0x000000);
+            spotlightTorus.position.set(10, 30, -35);
+            spotlightTorus.castShadow = true;
+
+            spotlightTorus.angle = 0.2;
+            spotlightTorus.penumbra = 0.4;
+            spotlightTorus.target = torusKnot;
+            // var helper = new THREE.CameraHelper(spotlightTorus.shadow.camera);
+            // scene.add(helper);
+            // spotlightTorus.shadow.camera.near = 0.1;
+            // spotlightTorus.shadow.camera.far = 100;
+            // spotlightTorus.shadow.camera.fov = 60;
+            scene.add(spotlightTorus);
+
+
+
+
+            var cubeGeom = new THREE.CubeGeometry(50, 50, 30,1,1,1);
             mirrorCubeCamera = new THREE.CubeCamera( 0.1, 5000, 512 );
             // mirrorCubeCamera.renderTarget.minFilter = THREE.LinearMipMapLinearFilter;
             scene.add( mirrorCubeCamera );
@@ -122,7 +142,7 @@
             mirrorCubeCamera.position.set(-75,50,0);
             scene.add(mirrorCube);	
             
-            var sphereGeom =  new THREE.SphereGeometry( 50, 32, 16 ); // radius, segmentsWidth, segmentsHeight
+            var sphereGeom =  new THREE.SphereGeometry( 25, 32, 16 ); // radius, segmentsWidth, segmentsHeight
             mirrorSphereCamera = new THREE.CubeCamera( 0.1, 5000, 512 );
             // mirrorCubeCamera.renderTarget.minFilter = THREE.LinearMipMapLinearFilter;
             scene.add( mirrorSphereCamera );
@@ -141,9 +161,9 @@
             var axes = new THREE.AxisHelper(100);
             scene.add(axes);
 
-            var imagePrefix = "textures/dawnmountain-";
+            var imagePrefix = "textures/DarkSea-";
             var directions = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
-            var imageSuffix = ".png";
+            var imageSuffix = ".jpg";
             var skyGeometry = new THREE.CubeGeometry(5000, 5000, 5000);
 
             var materialArray = [];
@@ -173,6 +193,19 @@
             stats.update();
         }
 
+        function createMesh(geom, imageFile) {
+            // var texture = new THREE.TextureLoader().load("textures/" + imageFile);
+			var texture = THREE.ImageUtils.loadTexture("textures/" + imageFile)
+			texture.wrapS = THREE.RepeatWrapping; 
+			texture.wrapT = THREE.RepeatWrapping; 
+			texture.repeat.set( 1., .2 );
+            var mat = new THREE.MeshPhongMaterial();
+            mat.map = texture;
+
+            var mesh = new THREE.Mesh(geom, mat);
+            return mesh;
+        }
+
         function render() {
             mirrorCube.visible = false;
             mirrorCubeCamera.updateCubeMap( renderer, scene );
@@ -181,6 +214,10 @@
             mirrorSphere.visible = false;
             mirrorSphereCamera.updateCubeMap( renderer, scene );
             mirrorSphere.visible = true;
+
+            // torusKnot.rotation.y += 0.02;
+            // torusKnot.position.x = 5 + (10 * (Math.cos(0.2 + 0.2)));
+
             renderer.render(scene, camera);
         }
 
