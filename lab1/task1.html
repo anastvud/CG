@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>3D Car with Circles</title>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+    <style type="text/css">
+        body {
+            background-color: #000000;
+            overflow: hidden;
+            margin: 0;
+        }
+    </style>
+    <script src="three.js"></script>
+</head>
+<body>
+    <div id="WebGLCanvas"></div>
+    <script>
+        let scene;
+        let camera;
+        let renderer;
+        let wrapper;
+
+        initializeScene();
+        animateScene();
+
+        function createCar() {
+            let carDownGeometry = new THREE.BoxGeometry(2.2, 0.1, 0.5);
+            let carDownMaterial = new THREE.MeshBasicMaterial({ color: 0x007FB9 });
+            let carDown = new THREE.Mesh(carDownGeometry, carDownMaterial);
+            carDown.position.set(0, -0.4, 0);
+
+            let carBodyGeometry = new THREE.BoxGeometry(2, 0.6, 0.5);
+            let carBodyMaterial = new THREE.MeshBasicMaterial({ color: 0x007FB9 });
+            let carBody = new THREE.Mesh(carBodyGeometry, carBodyMaterial);
+            carBody.position.set(0, -0.1, 0);
+
+            let carUpGeometry = new THREE.BoxGeometry(1.5, 0.4, 0.5);
+            let carUpMaterial = new THREE.MeshBasicMaterial({ color: 0x007FB9 });
+            let carUp = new THREE.Mesh(carUpGeometry, carUpMaterial);
+            carUp.position.set(0, 0.4, 0);
+
+            // car windows
+            let carWindowGeometry = new THREE.BoxGeometry(0.6, 0.3, 0.6);
+            let carWindowMaterial = new THREE.MeshDepthMaterial({ color: 0x000000 });
+            let carLeftWindow = new THREE.Mesh(carWindowGeometry, carWindowMaterial);
+            carLeftWindow.position.set(-0.35, 0.375, 0);
+            let carRightWindow = new THREE.Mesh(carWindowGeometry, carWindowMaterial);
+            carRightWindow.position.set(0.35, 0.375, 0);
+
+            // wheels
+            let wheelGeometry = new THREE.CircleGeometry(0.2, 32, 0.6);
+            let wheelMaterial = new THREE.MeshDepthMaterial({ color: 0x000000 });
+            let frontWheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
+            let rearWheel = new THREE.Mesh(wheelGeometry, wheelMaterial);
+            frontWheel.position.set(-0.7, -0.45, 0.25);
+            rearWheel.position.set(0.7, -0.45, 0.25);
+
+            // headlights
+            let headlightGeometry = new THREE.CircleGeometry(0.05, 32, 0.6);
+            let headlightMaterial = new THREE.MeshBasicMaterial({ color: 0xa81c00 });
+            let leftHeadlight = new THREE.Mesh(headlightGeometry, headlightMaterial);
+            let rightHeadlight = new THREE.Mesh(headlightGeometry, headlightMaterial);
+            leftHeadlight.position.set(-0.9, 0.1, 0.26);
+            rightHeadlight.position.set(0.9, 0.1, 0.26);
+
+            wrapper = new THREE.Object3D();
+            wrapper.add(carBody);
+            wrapper.add(carDown);
+            wrapper.add(carUp);
+            wrapper.add(carLeftWindow);
+            wrapper.add(carRightWindow);
+            wrapper.add(frontWheel);
+            wrapper.add(rearWheel);
+            wrapper.add(leftHeadlight);
+            wrapper.add(rightHeadlight);
+            scene.add(wrapper);
+
+        }
+
+        function initializeScene() {
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setClearColor(0xD3D3D3, 1);
+            canvasWidth = window.innerWidth;
+            canvasHeight = window.innerHeight;
+            renderer.setSize(canvasWidth, canvasHeight);
+            document.getElementById("WebGLCanvas").appendChild(renderer.domElement);
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(45, canvasWidth / canvasHeight, 1, 100);
+            camera.position.set(0, 0, 5);
+            camera.lookAt(scene.position);
+            scene.add(camera);
+
+            createCar();
+        }
+
+        function animateScene() { 
+            wrapper.position.x += 0.01;
+            requestAnimationFrame(animateScene);
+            renderScene();
+
+        } 
+
+        function renderScene() {
+            renderer.render(scene, camera);
+        }
+    </script>
+</body>
+</html>
