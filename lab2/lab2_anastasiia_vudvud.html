@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 
-
 <html>
 
 <head>
@@ -245,6 +244,7 @@
             icosahedron.rotation.y += controls.rotationSpeed;
             icosahedron.position.x = 5 + (10 * (Math.cos(step + 0.2)));
 
+
             // render using requestAnimationFrame
             requestAnimationFrame(renderScene);
             renderer.render(scene, camera);
@@ -260,6 +260,7 @@
             stats.domElement.style.position = 'absolute';
             stats.domElement.style.left = '3px';
             stats.domElement.style.top = '3px';
+
             document.getElementById("Stats-output").appendChild(stats.domElement);
 
             return stats;
@@ -268,4 +269,5 @@
 
     </script>
 </body>
+
 </html>
