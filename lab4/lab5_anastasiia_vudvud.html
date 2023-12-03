@@ -25,13 +25,13 @@
     WIDTH = window.innerWidth,
     HEIGHT = window.innerHeight;
 
-    VIEW_ANGLE = 75,
+    VIEW_ANGLE = 90,
     ASPECT = WIDTH / HEIGHT,
     NEAR = 1,
     FAR = 10000;
 
     scene = new Physijs.Scene();
-    scene.setGravity(new THREE.Vector3( 0, -50, 0 ));
+    scene.setGravity(new THREE.Vector3( 0, -100, 0 ));
     scene.addEventListener('update', function() {
       scene.simulate(undefined, 2);
     });
@@ -50,7 +50,7 @@
 
     camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
 
-    camera.position.set(90, 20, 130);
+    camera.position.set(50, 5, 175);
     camera.lookAt(scene.position);
     scene.add(camera);
 
@@ -83,7 +83,7 @@
     );
 
     plane.rotation.x = -Math.PI / 2;
-    plane.rotation.y = Math.PI / 40;
+    plane.rotation.y = Math.PI / 20;
     plane.receiveShadow = true;
 
     scene.add(plane);
@@ -105,9 +105,37 @@
     plane1.rotation.y = Math.PI / -20;
     plane1.receiveShadow = true;
 
-    plane1.position.set(60,-40,-30);
+    plane1.position.set(110,-40,-15);
+    plane1.rotateX(Math.PI / 180 * 3)
+    plane1.rotateY(Math.PI / 180 * -3)
+    plane1.rotateZ(Math.PI / 180 * -30)
 
     scene.add(plane1);
+
+    var plane2 = new Physijs.BoxMesh(
+      new THREE.CubeGeometry(100, 100, 2, 10, 10),
+      Physijs.createMaterial(
+        new THREE.MeshLambertMaterial({
+          color: 0xeeeeee
+        }),
+        .4,
+        .99
+      ),
+      0
+    );
+
+    plane2.rotation.x = -Math.PI / 2;
+    plane2.rotation.y = Math.PI / 20;
+    plane2.receiveShadow = true;
+
+    plane2.position.set(20,-70,25);
+    
+    plane2.rotateX(Math.PI / 180 * 5)
+    plane2.rotateY(Math.PI / 180 * -5)
+    plane2.rotateZ(Math.PI / 180 * -30)
+
+
+    scene.add(plane2);
 
 
     setInterval(function() {
@@ -148,10 +176,6 @@
     function render() {
       for (var i = 5; i < scene.children.length - 5; i++) {
         var obj = scene.children[i];
-
-        if (obj.position.y <= -50) {
-          scene.remove(obj);
-        }
       }
 
       renderer.render(scene, camera);
