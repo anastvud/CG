@@ -174,7 +174,7 @@
 				camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 1000 );
 
 				scene = new THREE.Scene();
-				// scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
+				scene.fog = new THREE.Fog( 0xffffff, 0, 750 );
 
 				var light = new THREE.DirectionalLight( 0xffffff, 1);
 				light.position.set( 1, 1, 1 );
@@ -193,6 +193,20 @@
 
 				ray = new THREE.Raycaster();
 				ray.ray.direction.set( 0, -1, 0 );
+
+
+				var cameraObjectGeometry = new THREE.BoxGeometry(10, 6, 5); // Adjust size as needed
+				var texture = THREE.ImageUtils.loadTexture("riffle.png")
+				texture.wrapS = THREE.RepeatWrapping; 
+				texture.wrapT = THREE.RepeatWrapping; 
+				var mat = new THREE.MeshBasicMaterial({transparent: true});
+				mat.map = texture;
+				var cameraObject = new THREE.Mesh(cameraObjectGeometry, mat);
+				cameraObject.position.set(4, -3, -10); // Adjust distance from the camera
+				camera.add(cameraObject);
+
+
+
 
 				// floor
 
@@ -231,11 +245,10 @@
 
 					var face = geometry.faces[ i ];
 					face.vertexColors[ 0 ] = new THREE.Color().setHSL( Math.random() * 0.8 + 0.5, 0.75, Math.random() * 0.25 + 0.6 );
-					// face.vertexColors[ 1 ] = new THREE.Color().setHSL( Math.random() * 0.8 + 0.5, 0.75, Math.random() * 0.25 + 0.6 );
 					face.vertexColors[ 2 ] = new THREE.Color().setHSL( Math.random() * 0.8 + 0.5, 0.75, Math.random() * 0.25 + 0.6 );
 				}
 
-				for ( var i = 0; i < 500; i ++ ) {
+				for ( var i = 0; i < 350; i ++ ) {
 
 					material = new THREE.MeshPhongMaterial( { specular: 0xffffff, shading: THREE.FlatShading, vertexColors: THREE.VertexColors } );
 
@@ -250,6 +263,26 @@
 					objects.push( mesh );
 
 				}
+
+
+				sphere = new THREE.SphereGeometry( 7.5, 32, 16 );
+
+				for ( var i = 0; i < 350; i ++ ) {
+
+					material = new THREE.MeshPhongMaterial( { specular: 0xffffff, shading: THREE.FlatShading, vertexColors: THREE.VertexColors } );
+
+					var mesh = new THREE.Mesh( sphere, material );
+					mesh.position.x = Math.floor( Math.random() * 20 - 10 ) * 20;
+					mesh.position.y = Math.floor( Math.random() * 20 ) * 20 + 10;
+					mesh.position.z = Math.floor( Math.random() * 20 - 10 ) * 20;
+					scene.add( mesh );
+
+					material.color.setHSL( Math.random() * 0.2 + 0.5, 0.75, Math.random() * 0.25 + 0.75 );
+
+					objects.push( mesh );
+
+				}
+
 
 				//
 
