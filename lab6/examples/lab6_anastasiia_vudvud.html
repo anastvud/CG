@@ -37,7 +37,7 @@
 
 				scene = new THREE.Scene();
 				scene.background = new THREE.Color( 0xa0a0a0 );
-				scene.fog = new THREE.Fog( 0xa0a0a0, 200, 1000 );
+				scene.fog = new THREE.Fog( 0xa0a0a0, 10, 1200 );
 
 				light = new THREE.HemisphereLight( 0xffffff, 0x444444 );
 				light.position.set( 0, 200, 0 );
@@ -52,6 +52,16 @@
 				light.shadow.camera.right = 120;
 				scene.add( light );
 
+
+                var spotLight = new THREE.SpotLight( 0xF4D35E );
+                spotLight.castShadow = true;
+                spotLight.position.set( 1200, 200, 200 );
+                // spotLight.shadow.camera.top = 180;
+				// spotLight.shadow.camera.bottom = - 100;
+				// spotLight.shadow.camera.left = - 120;
+				// spotLight.shadow.camera.right = 120;
+                scene.add( spotLight );
+
 				// scene.add( new CameraHelper( light.shadow.camera ) );
 
 				// ground
@@ -60,16 +70,11 @@
 				mesh.receiveShadow = true;
 				scene.add( mesh );
 
-				var grid = new THREE.GridHelper( 2000, 20, 0x000000, 0x000000 );
-				grid.material.opacity = 0.2;
-				grid.material.transparent = true;
-				scene.add( grid );
+				// var grid = new THREE.GridHelper( 2000, 20, 0x000000, 0x000000 );
+				// grid.material.opacity = 0.2;
+				// grid.material.transparent = true;
+				// scene.add( grid );
 				
-				//box
-				//var boxgeom = new THREE.BoxMesh(10,20,2);
-				//var boxmat = new THREE.MeshPhongMaterial({color:0xee0000});
-				//var box = new THREE.Mesh(boxgeom, boxmat);
-				//scene.add(box);
 
 				// model
 				var model1 = new FBXLoader();
@@ -145,7 +150,7 @@
 					} );
 
 					scene.add( object );
-
+                    action.clampWhenFinished = true;
 				} );
 			}
 			function onWindowResize() {
